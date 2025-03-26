@@ -28,6 +28,7 @@ const ProductListScreen = ({ navigation }) => {
 
   const renderItem = ({ item }) => (
     <TouchableOpacity 
+      testID={`product-item-${item.id}`}
       style={styles.productCard}
       onPress={() => {
         // Navigate to product detail screen
@@ -45,6 +46,7 @@ const ProductListScreen = ({ navigation }) => {
         <Text style={styles.productPrice}>${item.productPrice.toFixed(2)}</Text>
         <StarRating rating={item.ratings} />
         <TouchableOpacity 
+          testID={`add-to-cart-${item.id}`}
           style={styles.addButton}
           onPress={() => handleAddToCart(item)}
         >
@@ -59,6 +61,7 @@ const ProductListScreen = ({ navigation }) => {
       <View style={styles.header}>
         <Text style={styles.headerText}>WilliEyeGShop</Text>
         <TouchableOpacity 
+          testID="cart-icon"
           style={styles.cartButton}
           onPress={() => navigation.navigate('Cart')}
         >
@@ -104,6 +107,7 @@ const ProductListScreen = ({ navigation }) => {
             
             <View style={styles.modalButtons}>
               <TouchableOpacity
+                testID="continue-shopping"
                 style={[styles.modalButton, styles.continueButton]}
                 onPress={() => setModalVisible(false)}
               >
@@ -111,6 +115,7 @@ const ProductListScreen = ({ navigation }) => {
               </TouchableOpacity>
               
               <TouchableOpacity
+                testID="go-to-cart"
                 style={[styles.modalButton, styles.modalCartButton]}
                 onPress={() => {
                   setModalVisible(false);

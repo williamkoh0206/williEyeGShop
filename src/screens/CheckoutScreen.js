@@ -162,6 +162,7 @@ const CheckoutScreen = ({ navigation }) => {
           ]}
           onPress={handlePayment}
           disabled={isLoading || cartItems.length === 0}
+          testID="confirm-payment-button"
         >
           {isLoading ? (
             <ActivityIndicator color={colors.neutralBase} size="small" />
@@ -179,16 +180,18 @@ const CheckoutScreen = ({ navigation }) => {
         transparent={true}
         visible={successModalVisible}
         onRequestClose={handleSuccess}
+        testID="success-modal"
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Payment Successful</Text>
-            <Text style={styles.modalText}>
+            <Text style={styles.modalText} testID="success-message">
               Congrats, your payment has been successful!
             </Text>
             <TouchableOpacity
               style={styles.confirmButton}
               onPress={handleSuccess}
+              testID="success-confirm-button"
             >
               <Text style={styles.confirmButtonText}>Confirm</Text>
             </TouchableOpacity>
@@ -221,7 +224,7 @@ const CheckoutScreen = ({ navigation }) => {
         </View>
         
         {/* Payment Details */}
-        <View style={styles.paymentContainer}>
+        <View style={styles.paymentContainer} testID="checkout-form">
           <Text style={styles.sectionTitle}>Payment Details</Text>
           
           <View style={styles.inputContainer}>
@@ -233,6 +236,7 @@ const CheckoutScreen = ({ navigation }) => {
               onChangeText={setName}
               returnKeyType="next"
               blurOnSubmit={false}
+              testID="name-input"
             />
           </View>
           
@@ -243,17 +247,18 @@ const CheckoutScreen = ({ navigation }) => {
               placeholder="Enter your card number"
               value={creditCardNumber}
               onChangeText={setCreditCardNumber}
-              keyboardType="number-pad"
+              keyboardType={__DEV__ ? "default" : "number-pad"}
               maxLength={16}
               returnKeyType="done"
               onSubmitEditing={Keyboard.dismiss}
+              testID="credit-card-input"
             />
           </View>
           
           {/* Extra padding at bottom for Android keyboard */}
-          {Platform.OS === 'android' && (
+          {/* {Platform.OS === 'android' && (
             <View style={styles.androidBottomPadding} />
-          )}
+          )} */}
         </View>
       </>
     );

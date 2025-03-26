@@ -81,7 +81,9 @@ const ProductDetailScreen = ({ route, navigation }) => {
         </TouchableOpacity>
       </View>
       
-      <ScrollView style={styles.scrollView}>
+      <ScrollView 
+        testID="product-detail-container"
+        style={styles.scrollView}>
         {/* Product Image */}
         <Image
           source={product.productPhoto}
@@ -91,8 +93,8 @@ const ProductDetailScreen = ({ route, navigation }) => {
         
         {/* Product Info */}
         <View style={styles.productInfo}>
-          <Text style={styles.productName}>{product.productName}</Text>
-          <Text style={styles.productPrice}>${product.productPrice.toFixed(2)}</Text>
+          <Text testID="product-name" style={styles.productName}>{product.productName}</Text>
+          <Text testID="product-price" style={styles.productPrice}>${product.productPrice.toFixed(2)}</Text>
           <View style={styles.ratingContainer}>
             <StarRating rating={product.ratings} />
           </View>
@@ -100,22 +102,27 @@ const ProductDetailScreen = ({ route, navigation }) => {
         
         {/* Product Description */}
         <View style={styles.descriptionContainer}>
-          <Text style={styles.descriptionTitle}>Description</Text>
+          <Text testID="product-description" style={styles.descriptionTitle}>Description</Text>
           <Text style={styles.descriptionText}>{product.description}</Text>
         </View>
         
         {/* Quantity Selector */}
-        <View style={styles.quantityContainer}>
+        <View 
+          testID="quantity-container"
+          style={styles.quantityContainer}
+        >
           <Text style={styles.quantityTitle}>Quantity</Text>
           <View style={styles.quantitySelector}>
             <TouchableOpacity
+              testID="decrease-quantity"
               style={styles.quantityButton}
               onPress={decreaseQuantity}
             >
               <Text style={styles.quantityButtonText}>-</Text>
             </TouchableOpacity>
-            <Text style={styles.quantityText}>{quantity}</Text>
+            <Text testID="quantity-display" style={styles.quantityText}>{quantity}</Text>
             <TouchableOpacity
+              testID="increase-quantity"
               style={styles.quantityButton}
               onPress={increaseQuantity}
             >
@@ -136,6 +143,7 @@ const ProductDetailScreen = ({ route, navigation }) => {
       {/* Add to Cart Button */}
       <View style={styles.bottomContainer}>
         <TouchableOpacity
+          testID="add-to-cart-button"
           style={styles.addToCartButton}
           onPress={handleAddToCart}
         >

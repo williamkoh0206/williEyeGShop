@@ -17,15 +17,20 @@ const CartItem = ({ item, onUpdateQuantity, onRemove }) => {
   const itemTotal = item.productPrice * item.quantity;
 
   return (
-    <View style={styles.cartItem}>
+    <View testID={`cart-item-${item.id}`} style={styles.cartItem}>
       <Image source={item.productPhoto} style={styles.itemImage} />
       
       <View style={styles.itemDetails}>
-        <Text style={styles.itemName} numberOfLines={1}>{item.productName}</Text>
-        <Text style={styles.itemPrice}>${item.productPrice.toFixed(2)}</Text>
+        <Text testID={`cart-item-name-${item.id}`} style={styles.itemName} numberOfLines={1}>
+          {item.productName}
+        </Text>
+        <Text testID={`cart-item-price-${item.id}`} style={styles.itemPrice}>
+          ${item.productPrice.toFixed(2)}
+        </Text>
         
         <View style={styles.quantityContainer}>
           <TouchableOpacity 
+            testID={`decrease-item-${item.id}`}
             style={styles.quantityButton}
             onPress={() => onUpdateQuantity(item.id, item.quantity - 1)}
             disabled={item.quantity <= 1}
@@ -36,9 +41,12 @@ const CartItem = ({ item, onUpdateQuantity, onRemove }) => {
             ]}>-</Text>
           </TouchableOpacity>
           
-          <Text style={styles.quantityText}>{item.quantity}</Text>
+          <Text testID={`cart-item-quantity-${item.id}`} style={styles.quantityText}>
+            Qty: {item.quantity}
+          </Text>
           
           <TouchableOpacity 
+            testID={`increase-item-${item.id}`}
             style={styles.quantityButton}
             onPress={() => onUpdateQuantity(item.id, item.quantity + 1)}
           >
@@ -48,8 +56,11 @@ const CartItem = ({ item, onUpdateQuantity, onRemove }) => {
       </View>
       
       <View style={styles.itemActions}>
-        <Text style={styles.itemTotal}>${itemTotal.toFixed(2)}</Text>
+        <Text testID={`cart-item-total-${item.id}`} style={styles.itemTotal}>
+          ${itemTotal.toFixed(2)}
+        </Text>
         <TouchableOpacity 
+          testID={`remove-item-${item.id}`}
           style={styles.removeButton}
           onPress={() => onRemove(item.id, item.productName)}
         >
@@ -111,10 +122,11 @@ const CartScreen = ({ navigation }) => {
   };
   
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView testID="cart-screen" style={styles.container}>
       {/* Header */}
-      <View style={styles.header}>
+      <View testID="cart-header" style={styles.header}>
         <TouchableOpacity
+          testID="back-button"
           style={styles.backButton}
           onPress={() => navigation.goBack()}
         >
@@ -125,11 +137,12 @@ const CartScreen = ({ navigation }) => {
       </View>
       
       {/* Cart Content */}
-      <View style={styles.content}>
+      <View testID="cart-content" style={styles.content}>
         {cartItems.length === 0 ? (
-          <View style={styles.emptyCart}>
+          <View testID="empty-cart" style={styles.emptyCart}>
             <Text style={styles.emptyCartText}>Your cart is empty</Text>
             <TouchableOpacity
+              testID="shop-now-button"
               style={styles.shopButton}
               onPress={() => navigation.navigate('ProductList')}
             >
@@ -139,6 +152,7 @@ const CartScreen = ({ navigation }) => {
         ) : (
           <>
             <FlatList
+              testID="cart-items-list"
               data={cartItems}
               renderItem={({ item }) => (
                 <CartItem 
@@ -152,20 +166,21 @@ const CartScreen = ({ navigation }) => {
             />
             
             {/* Summary Section */}
-            <View style={styles.summaryContainer}>
+            <View testID="cart-summary" style={styles.summaryContainer}>
               <View style={styles.summaryRow}>
                 <Text style={styles.summaryText}>Total Items:</Text>
-                <Text style={styles.summaryValue}>{itemCount}</Text>
+                <Text testID="cart-total-items" style={styles.summaryValue}>{itemCount}</Text>
               </View>
               <View style={styles.summaryRow}>
                 <Text style={styles.summaryTextBold}>Total:</Text>
-                <Text style={styles.summaryTotal}>${totalAmount.toFixed(2)}</Text>
+                <Text testID="cart-total" style={styles.summaryTotal}>${totalAmount.toFixed(2)}</Text>
               </View>
             </View>
             
             {/* Action Buttons */}
-            <View style={styles.actionButtons}>
+            <View testID="cart-actions" style={styles.actionButtons}>
               <TouchableOpacity 
+                testID="clear-cart-button"
                 style={styles.clearButton}
                 onPress={confirmClearCart}
               >
@@ -173,6 +188,7 @@ const CartScreen = ({ navigation }) => {
               </TouchableOpacity>
               
               <TouchableOpacity 
+                testID="checkout-button"
                 style={styles.checkoutButton}
                 onPress={handleCheckout}
               >
@@ -193,15 +209,16 @@ const CartScreen = ({ navigation }) => {
         visible={removeModalVisible}
         onRequestClose={() => setRemoveModalVisible(false)}
       >
-        <View style={styles.modalContainer}>
+        <View testID="remove-modal" style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Remove Item</Text>
-            <Text style={styles.modalText}>
+            <Text testID="remove-modal-text" style={styles.modalText}>
               Are you sure you want to remove {itemToRemove?.name} from your cart?
             </Text>
             
             <View style={styles.modalButtons}>
               <TouchableOpacity 
+                testID="modal-cancel-button"
                 style={[styles.modalButton, styles.cancelButton]}
                 onPress={() => setRemoveModalVisible(false)}
               >
@@ -209,6 +226,7 @@ const CartScreen = ({ navigation }) => {
               </TouchableOpacity>
               
               <TouchableOpacity 
+                testID="modal-remove-button"
                 style={[styles.modalButton, styles.confirmButton]}
                 onPress={handleRemoveItem}
               >
@@ -226,15 +244,16 @@ const CartScreen = ({ navigation }) => {
         visible={clearModalVisible}
         onRequestClose={() => setClearModalVisible(false)}
       >
-        <View style={styles.modalContainer}>
+        <View testID="clear-modal" style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Clear Cart</Text>
-            <Text style={styles.modalText}>
+            <Text testID="clear-modal-text" style={styles.modalText}>
               Are you sure you want to clear all items from your cart?
             </Text>
             
             <View style={styles.modalButtons}>
               <TouchableOpacity 
+                testID="modal-cancel-clear-button"
                 style={[styles.modalButton, styles.cancelButton]}
                 onPress={() => setClearModalVisible(false)}
               >
@@ -242,6 +261,7 @@ const CartScreen = ({ navigation }) => {
               </TouchableOpacity>
               
               <TouchableOpacity 
+                testID="modal-confirm-clear-button"
                 style={[styles.modalButton, styles.confirmButton]}
                 onPress={handleClearCart}
               >
