@@ -9,4 +9,15 @@ module.exports = {
   reporters: ['detox/runners/jest/reporter'],
   testEnvironment: 'detox/runners/jest/testEnvironment',
   verbose: true,
+  reporters: [
+    "default",
+    ["jest-html-reporter", {
+      "pageTitle": "WilliEyeGShop Test Report",
+      "outputPath": "./__tests__/e2e/test-report/index.html",
+      "includeFailureMsg": true,
+      "includeSuiteFailure": true,
+      "includeConsoleLog": true,
+      "useCssFile": true,
+    }]
+  ],
 };

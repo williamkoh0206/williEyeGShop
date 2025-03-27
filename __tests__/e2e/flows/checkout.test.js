@@ -116,5 +116,84 @@ describe('Checkout Flow', () => {
       await waitFor(element(by.id('product-item-1')))
         .toBeVisible()
         .withTimeout(2000);
+    })
+
+    it('unsuccessful checkout case', async () => {
+      //Step1: Select another product from the list
+      await waitFor(element(by.id('product-item-2')))
+        .toBeVisible()
+        .withTimeout(2000);
+      await element(by.id('product-item-2')).tap();
+
+      //Step2: Inside productDetail screen, scroll to the quantity container
+      await element(by.id('product-detail-container')).scroll(500, 'down');
+
+      // Wait for quantity container to be visible after scrolling
+      await waitFor(element(by.id('product-detail-container')))
+        .toBeVisible()
+        .withTimeout(2000);
+
+      //Increase quantity to 6
+      const tapsNeeded = 5;
+      for (let i = 0; i < tapsNeeded; i++) {
+        await element(by.id('increase-quantity')).tap();
+        // Optional: add a small delay between taps if the UI needs time to update
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
+      // Verify final quantity
+      await expect(element(by.id('quantity-display'))).toHaveText('6');
+      
+      // Add to cart from alert dialog
+      await element(by.text('Add to Cart')).tap();
+
+      // Go to cart from alert dialog
+      await element(by.text('Go to Cart')).tap();
+
+      //Step3: Verify cart and proceed to checkout
+      await waitFor(element(by.id('cart-items-list')))
+        .toBeVisible()
+        .withTimeout(2000);
+      await expect(element(by.id('cart-item-2'))).toBeVisible();
+      await expect(element(by.id('cart-item-quantity-2'))).toHaveText('Qty: 6');
+
+      // Go to checkout
+      await element(by.id('checkout-button')).tap();
+
+      // Step 4: Wait for checkout form to appear
+        await waitFor(element(by.id('checkout-form')))
+        .toBeVisible()
+        .withTimeout(2000);
+      
+      // Do not fill any fields
+      console.log('Attempting to confirm payment with empty fields...');
+      
+      // Confirm payment directly with empty fields
+      await element(by.id('confirm-payment-button')).tap();
+
+      // Step 5: Verify error alert appears
+    try {
+      // Wait for the alert to appear
+      console.log('Waiting for error alert...');
+      
+      // Check for alert with appropriate text
+      await expect(element(by.text('Payment Failed'))).toBeVisible();
+      await expect(element(by.text('Sorry, we are not able to proceed. Please try again.'))).toBeVisible();
+      
+      // Tap OK on the alert to dismiss it
+      await element(by.text('OK')).tap();
+      
+      // Verify we're still on the checkout page (not redirected)
+      await expect(element(by.id('checkout-form'))).toBeVisible();
+      
+      console.log('Error alert verified, test passed!');
+    } catch (error) {
+      console.error('Error during alert verification:', error);
+      try {
+        await device.takeScreenshot('checkout-error-alert-' + new Date().getTime());
+      } catch (e) {
+        console.log('Could not take screenshot', e);
+      }
+      throw error;
+    }
     });
   });

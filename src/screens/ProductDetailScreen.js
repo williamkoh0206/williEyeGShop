@@ -27,6 +27,8 @@ const ProductDetailScreen = ({ route, navigation }) => {
   // Handle quantity changes
   const increaseQuantity = () => {
     setQuantity(prevQuantity => prevQuantity + 1);
+    const quatityNum = null;
+    console.log(quatityNum);
   };
   
   const decreaseQuantity = () => {
